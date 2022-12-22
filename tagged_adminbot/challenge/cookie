@@ -1,0 +1,9 @@
+{
+  "name": "session",
+  "value": "irisctf{security_by_option}",
+  "domain": "DOMAIN_SET_IN_DOCKERFILE",
+  "url": "http://DOMAIN_SET_IN_DOCKERFILE",
+  "path": "/",
+  "httpOnly": true,
+  "secure": true
+}

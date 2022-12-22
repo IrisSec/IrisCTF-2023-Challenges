@@ -1,0 +1,14 @@
+apiVersion: kctf.dev/v1
+kind: Challenge
+metadata:
+  name: nameless
+spec:
+  deployed: true
+  powDifficultySeconds: 0
+  network:
+    public: false
+  healthcheck:
+    # TIP: disable the healthcheck during development
+    enabled: true
+    image: kind/healthcheck:299009844f5873b1987b85055da60e9709064182d39a6b3a2373d639399519d7
+  image: kind/challenge:0bb35a46297a3e639228ebb42f84e0c1760fec834be5ef9684dfe0710bc28024
