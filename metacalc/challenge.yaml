@@ -1,0 +1,14 @@
+apiVersion: kctf.dev/v1
+kind: Challenge
+metadata:
+  name: metacalc
+spec:
+  deployed: true
+  powDifficultySeconds: 0
+  network:
+    public: false
+  healthcheck:
+    # TIP: disable the healthcheck during development
+    enabled: true
+    image: kind/healthcheck:e59ec4aeef9d56f7329ae6849c9cf60166243b33dfd1ec1dccb91884dac89bc1
+  image: kind/challenge:138223505116c33a827abc4d51fcd0d7127355b3628d9056da8c7811d1244641
