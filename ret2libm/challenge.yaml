@@ -1,0 +1,14 @@
+apiVersion: kctf.dev/v1
+kind: Challenge
+metadata:
+  name: ret2libm
+spec:
+  deployed: true
+  powDifficultySeconds: 0
+  network:
+    public: false
+  healthcheck:
+    # TIP: disable the healthcheck during development
+    enabled: true
+    image: kind/healthcheck:f5af64a54c7d17969c1a62106f2b3d1661bad94780454663892aacced3479d84
+  image: kind/challenge:e8791242b4d888abec10aa6ddf593bd7d2085f8b895fc0eace5c5131fd8f377b
