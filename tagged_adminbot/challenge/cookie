@@ -4,6 +4,5 @@
   "domain": "DOMAIN_SET_IN_DOCKERFILE",
   "url": "http://DOMAIN_SET_IN_DOCKERFILE",
   "path": "/",
-  "httpOnly": true,
-  "secure": true
+  "httpOnly": true
 }

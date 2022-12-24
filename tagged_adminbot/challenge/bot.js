@@ -50,6 +50,7 @@ if (BLOCK_SUBORIGINS) {
       socket.destroy();
       return;
     }
+
     socket.state = 'LOADED';
     let cookie = JSON.parse(fs.readFileSync('/home/user/cookie'));
 

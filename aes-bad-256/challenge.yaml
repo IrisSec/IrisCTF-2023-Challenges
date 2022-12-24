@@ -1,0 +1,14 @@
+apiVersion: kctf.dev/v1
+kind: Challenge
+metadata:
+  name: aes-bad-256
+spec:
+  deployed: true
+  powDifficultySeconds: 0
+  network:
+    public: false
+  healthcheck:
+    # TIP: disable the healthcheck during development
+    enabled: true
+    image: kind/healthcheck:bfadf3f573068e2be27fa087f0d976ce204037c694dae6f041c192eda0dca7cb
+  image: kind/challenge:ae714aee73442fb87b1918103662d8235276e6243d22bb7d987436ee5d97ba43
