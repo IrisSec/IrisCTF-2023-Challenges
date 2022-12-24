@@ -33,7 +33,6 @@ def decrypt(inp):
     data = b""
     for block in range(0, len(inp), MODE_BLOCK_SIZE):
         for j in range(MODE_BLOCK_SIZE // AES_BLOCK_SIZE):
-            #data += bytes(inp[block+i*(MODE_BLOCK_SIZE//AES_BLOCK_SIZE)+PERMUTATION.index(j)] for i in range(AES_BLOCK_SIZE))
             for i in range(AES_BLOCK_SIZE):
                 data += bytes([inp[block + PERMUTATION.index(i) * (MODE_BLOCK_SIZE // AES_BLOCK_SIZE) + j]])
   

@@ -20,7 +20,7 @@ print(BANNER)
 while True:
     choice = input("> ")
     try:
-        print(check("http://flag_domain/flag"))
+        print(check("http://flag_domain:25566/flag"))
     except subprocess.CalledProcessError: pass
     try:
         if choice == '1':
