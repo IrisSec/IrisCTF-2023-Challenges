@@ -32,7 +32,9 @@ COPY flag /
 COPY runner.py /home/user/
 
 # To compile
-# CMD ["bash"]
+CMD ["bash"]
 
-To test
-CMD ["python3", "/home/user/runner.py"]
+# To test
+# CMD ["python3", "/home/user/runner.py"]
+
+# Ensure you run the docker with --privileged

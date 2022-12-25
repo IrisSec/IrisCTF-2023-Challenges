@@ -14,7 +14,6 @@ while "DONE" not in read:
 print("Got it.")
 
 read = read.replace("DONE", "").replace("\n", "")
-print(repr(read))
 
 solve = bytes.fromhex(read)
 
