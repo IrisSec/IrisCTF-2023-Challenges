@@ -1,0 +1,245 @@
+const dotenv = require("dotenv");
+const express = require("express");
+const octokit = require("octokit");
+const url = require("url");
+const app = express();
+const SHA256 = require("crypto-js/sha256");
+
+const port = 1337;
+
+dotenv.config();
+const PERSONAL_ACCESS_TOKEN2 = process.env.PERSONAL_ACCESS_TOKEN2;
+
+const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+var tokens = {};
+var identities = {};
+
+function randomStr(len) {
+	let res = "";
+	for (let i = len; i > 0; i--) {
+		res += chars[Math.floor(Math.random() * chars.length)];
+	}
+	return res;
+}
+
+app.get("/gettoken", (req, res) => {
+	let tokenCode = randomStr(32);
+	let tokenObj = {
+		tokenCode: tokenCode,
+		identityCode: undefined,
+		timeCreated: Math.floor(Date.now() / 1000),
+		status: "UNVALIDATED"
+	};
+	tokens[tokenCode] = tokenObj;
+	console.log("/gettoken: " + tokenCode);
+	res.send(tokenCode);
+});
+
+app.get("/getiden", (req, res) => {
+	let q = url.parse(req.url, true).query;
+	if (!q.sdktok) {
+		res.send("missing sdktok");
+		return;
+	} else if (!q.repo) {
+		res.send("missing repo");
+		return;
+	} else if (!q.runid) {
+		res.send("missing runid");
+		return;
+	}
+	
+	let tokenCode = q.sdktok;
+	let tokenObj = tokens[tokenCode];
+	if (tokenObj == undefined) {
+		res.send("token doesn't exist!");
+		return;
+	}
+	
+	if (!hasTokenNotExpired(tokenObj)) {
+		res.send("token expired!");
+		return;
+	}
+	
+	let ownerName = q.repo.toString().split("/")[0];
+	let repoName = q.repo.toString().split("/")[1];
+	
+	let identityCode = randomStr(32);
+	let identityObj = {
+		identityCode: identityCode,
+		tokenCode: q.sdktok.toString(),
+		owner: ownerName,
+		repo: repoName,
+		runId: q.runid.toString(),
+		timeCreated: Math.floor(Date.now() / 1000)
+	};
+	identities[identityCode] = identityObj;
+	tokens[tokenCode].identity = identityCode;
+	console.log("/getiden: " + identityCode);
+	res.send(identityCode);
+});
+
+app.get("/checkiden", async (req, res) => {
+	let q = url.parse(req.url, true).query;
+	if (!q.sdktok) {
+		res.send("missing sdktok");
+		return;
+	}
+	
+	let tokenCode = q.sdktok;
+	let tokenObj = tokens[tokenCode];
+	if (tokenObj == undefined) {
+		res.send("token doesn't exist!");
+		return;
+	}
+	
+	if (!hasTokenNotExpired(tokenObj)) {
+		res.send("token expired!");
+		return;
+	}
+	
+	let identityObj = identities[tokenObj.identity];
+	
+	let repoIdentity = await getRepoIdentity(identityObj.owner, identityObj.repo, identityObj.runId);
+	if (repoIdentity == undefined) {
+		res.send("repo identity failed!");
+		return;
+	}
+	
+	if (repoIdentity != identityObj.identityCode) {
+		res.send(`repo identity failed! found ${repoIdentity} but expected ${identityObj.identityCode}`);
+		return;
+	}
+	
+	tokenObj.status = "VALIDATED";
+	
+	console.log("/checkiden: " + "OK");
+	res.send("OK");
+});
+
+app.get("/getsdk", (req, res) => {
+	let q = url.parse(req.url, true).query;
+	if (!q.sdktok) {
+		res.send("missing sdktok");
+		return;
+	}
+	
+	let tokenCode = q.sdktok;
+	let tokenObj = tokens[tokenCode];
+	if (tokenObj == undefined) {
+		res.send("token doesn't exist!");
+		return;
+	}
+	
+	if (!hasTokenNotExpired(tokenObj)) {
+		res.send("token expired!");
+		return;
+	}
+	
+	if (tokenObj.status == "VALIDATED") {
+		tokenObj.status = "EXPIRED";
+		res.sendFile("coolsdk.tar.gz", {root: __dirname});
+	} else {
+		res.send("no u");
+	}
+});
+
+app.listen(port, () => {
+	console.log(`My cool sdk server running on ${port}`);
+});
+
+function hasTokenNotExpired(tokenObj) {	
+	if (tokenObj.status == "EXPIRED" || (Date.now() / 1000) - tokenObj.timeCreated > 30) {
+		tokenObj.status = "EXPIRED";
+		return false;
+	}
+	return true;
+}
+
+async function getRepoIdentity(owner, repo, runId) {
+	const octo = new octokit.Octokit({
+		auth: PERSONAL_ACCESS_TOKEN2
+	});
+
+	let runJobInfo = await octo.request("GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs", {
+		owner: owner,
+		repo: repo,
+		run_id: runId
+	});
+	
+	let jobLogInfo = await octo.request("GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs", {
+		owner: owner,
+		repo: repo,
+		job_id: runJobInfo.data.jobs[0].id
+	});
+	
+	let logLines = jobLogInfo.data.split(/\r?\n/);
+	
+	let idenStr = undefined;
+	const target = "Z SDK Server Identity: ";
+	for (let i = 0; i < logLines.length; i++) {
+		if (logLines[i].includes(target)) {
+			let idx = logLines[i].indexOf(target);
+			let len = target.length;
+			
+			idenStr = logLines[i].substring(idx + len);
+			break;
+		}
+		if (logLines[i].includes("##[debug]")) {
+			return undefined;
+		}
+	}
+
+	if (idenStr == undefined) {
+		return undefined;
+	}
+
+	// verify workflow file
+	let runInfo = await octo.request("GET /repos/{owner}/{repo}/actions/runs/{run_id}", {
+		owner: owner,
+		repo: repo,
+		run_id: runId
+	});
+
+	let runHeadSha = runInfo.data.head_sha;
+	let runFilePath = runInfo.data.path;
+
+	let fileInfo = await octo.request("GET /repos/{owner}/{repo}/contents/{path}{?ref}", {
+		owner: owner,
+		repo: repo,
+		path: runFilePath,
+		ref: runHeadSha
+	});
+
+	let workflowContents = Buffer.from(fileInfo.data.content, "base64");
+	let workflowHash = SHA256(workflowContents.toString()).toString();
+
+	const MATCH_HASH = "4278a02118b558e498db7c322d98fff4b6cb0d9deed0a65ed9e42cb4f5e36fc8";
+	if (workflowHash != MATCH_HASH) {
+		console.log(`expected ${MATCH_HASH}, found ${workflowHash} hash for workflow!`);
+		return undefined;
+	}
+	
+	console.log(idenStr);
+	return idenStr;
+}
+
+// dbg only, remove for competition
+async function getHash() {
+	const octo = new octokit.Octokit({
+		auth: PERSONAL_ACCESS_TOKEN2
+	});
+	
+	let workflowInfo = await octo.request("GET /repos/{username}/{repository_name}/contents/{file_path}", {
+		username: "nesrak1",
+		repository_name: "MyCoolProgramTest",
+		file_path: ".github/workflows/build.yml"
+	});
+
+	let workflowContents = Buffer.from(workflowInfo.data.content, "base64");
+	let workflowHash = SHA256(workflowContents.toString()).toString();
+
+	console.log(workflowHash);
+}
+
+//getHash();

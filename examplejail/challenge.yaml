@@ -11,4 +11,4 @@ spec:
     # TIP: disable the healthcheck during development
     enabled: true
     image: kind/healthcheck:3f99536980081c26980eb048ce9dc6bdac17954811dcd13a88a7f32fdcbc6703
-  image: kind/challenge:2bd4ca2b645f8625a7a3e89a1344bb4e7dbffa05315d97ed46d88ae8583671f4
+  image: kind/challenge:a0fbd5819dc5b37dc58546f3cb963453e5ab252dcf334a6d4478f2aa779ccd73

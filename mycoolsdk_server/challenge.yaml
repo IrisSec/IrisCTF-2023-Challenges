@@ -1,0 +1,17 @@
+apiVersion: kctf.dev/v1
+kind: Challenge
+metadata:
+  name: mycoolsdk_server
+spec:
+  deployed: true
+  powDifficultySeconds: 0
+  network:
+    public: false
+    ports:
+      - protocol: "HTTPS"
+        targetPort: 1337
+  healthcheck:
+    # TIP: disable the healthcheck during development
+    enabled: true
+    image: kind/healthcheck:85f1d51fe2953272fc736b6d228442ebed8778698579ebd271c9f05f0a3d5415
+  image: kind/challenge:9eb337364530081c4125ea85a7c8f4dd3c2f8d96724eda079cbd940a1c4bb275
