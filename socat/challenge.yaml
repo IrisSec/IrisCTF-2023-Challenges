@@ -1,7 +1,7 @@
 apiVersion: kctf.dev/v1
 kind: Challenge
 metadata:
-  name: examplejail
+  name: socat
 spec:
   deployed: true
   powDifficultySeconds: 0
@@ -10,5 +10,5 @@ spec:
   healthcheck:
     # TIP: disable the healthcheck during development
     enabled: true
-    image: kind/healthcheck:e7b3fa60b16d21570a3b5412238b1f138e80f5e2c6751b87c242283d7ada2400
-  image: kind/challenge:dfee8c371c043a3fe9c5d730e6ed9d4acfa942f7b90459455956669f0d9e448b
+    image: kind/healthcheck:c64d96ef8b6b6388c1e3011e03d5f567342e9730c2b856d3a84014b6d63bc465
+  image: kind/challenge:b99eeecaf4995226e798eee424192f056e8f6c70a517616afafc3882683bfeb2

@@ -30,14 +30,8 @@ print(r.recvuntil(b'== proof-of-work: '))
 if r.recvline().startswith(b'enabled'):
     handle_pow(r)
 
-with open("/home/user/solve", "rb") as f:
-    solve = f.read()
-
-for i in range(0, len(solve), 4000):
-    r.sendline(solve[i:i+4000].hex().encode())
-r.sendline(b"DONE")
-
-print(r.recvuntil(b"irisctf{").decode())
-print(r.recvuntil(b"}").decode())
+r.sendline(b'"')
+print(r.recvuntil(b'irisctf{'))
+print(r.recvuntil(b'}'))
 
 exit(0)

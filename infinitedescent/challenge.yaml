@@ -1,7 +1,7 @@
 apiVersion: kctf.dev/v1
 kind: Challenge
 metadata:
-  name: examplejail
+  name: infinitedescent
 spec:
   deployed: true
   powDifficultySeconds: 0
@@ -10,5 +10,5 @@ spec:
   healthcheck:
     # TIP: disable the healthcheck during development
     enabled: true
-    image: kind/healthcheck:e7b3fa60b16d21570a3b5412238b1f138e80f5e2c6751b87c242283d7ada2400
-  image: kind/challenge:dfee8c371c043a3fe9c5d730e6ed9d4acfa942f7b90459455956669f0d9e448b
+    image: kind/healthcheck:9dde3fcd96c0c78a8e846b95fe95146bbd29013fc60a4ac3bf2880e915e3292b
+  image: kind/challenge:16a7473f8e0e33c25542c83916bd53758c7de5d1f3b6c8a7bd7f2931f8d80672

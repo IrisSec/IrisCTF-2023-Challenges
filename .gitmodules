@@ -1,0 +1,3 @@
+[submodule "infinitedescent/challenge/CMSIS_5"]
+	path = infinitedescent/challenge/CMSIS_5
+	url = https://github.com/ARM-software/CMSIS_5.git
