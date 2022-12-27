@@ -1,0 +1,14 @@
+apiVersion: kctf.dev/v1
+kind: Challenge
+metadata:
+  name: michaelbank
+spec:
+  deployed: true
+  powDifficultySeconds: 0
+  network:
+    public: false
+  healthcheck:
+    # TIP: disable the healthcheck during development
+    enabled: true
+    image: kind/healthcheck:e6762521cdfe3808e5a09777b01f4a6531b3cb079cd9599758e6491831ace8d2
+  image: kind/challenge:7d053942631cfd79e52b69d27224206f1d76c3b2df322ca67c9b827c25b109f0
