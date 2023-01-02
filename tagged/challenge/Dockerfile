@@ -16,12 +16,12 @@ FROM python:3.11.1 as chroot
 RUN /usr/sbin/useradd -u 1000 user
 
 RUN python3 -m pip install flask gunicorn beautifulsoup4
+RUN apt-get update
+RUN apt-get install -y socat
+
 COPY chal.py /home/user/
 COPY home.html /home/user/
 COPY run.sh /home/user/
-
-RUN apt-get update
-RUN apt-get install -y socat
 
 FROM gcr.io/kctf-docker/challenge@sha256:d884e54146b71baf91603d5b73e563eaffc5a42d494b1e32341a5f76363060fb
 

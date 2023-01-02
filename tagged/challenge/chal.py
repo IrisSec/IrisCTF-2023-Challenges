@@ -18,11 +18,11 @@ def home():
 def add():
     contents = request.form.get('contents', "").encode()
     
-    return redirect("/page?contents=" + base64.urlsafe_b64encode(contents).replace(b"=", b"%27").decode())
+    return redirect("/page?contents=" + base64.urlsafe_b64encode(contents).decode())
 
 @app.route("/page")
 def page():
-    contents = request.args.get('contents')
+    contents = base64.urlsafe_b64decode(request.args.get('contents', '')).decode()
     
     tree = BeautifulSoup(contents)
     for element in tree.find_all():
