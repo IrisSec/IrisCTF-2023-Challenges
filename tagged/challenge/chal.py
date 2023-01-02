@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect
 from bs4 import BeautifulSoup
 import secrets
+import base64
 
 app = Flask(__name__)
 pages = {}
@@ -15,22 +16,18 @@ def home():
 
 @app.route("/add", methods=['POST'])
 def add():
-    contents = request.form.get('contents')
+    contents = request.form.get('contents', "").encode()
+    
+    return redirect("/page?contents=" + base64.urlsafe_b64encode(contents).replace(b"=", b"%27").decode())
+
+@app.route("/page")
+def page():
+    contents = request.args.get('contents')
     
     tree = BeautifulSoup(contents)
     for element in tree.find_all():
         if element.name not in SAFE_TAGS or len(element.attrs) > 0:
             return "This HTML looks sus."
 
-    new_id = secrets.token_hex(16)
-    pages[new_id] = str(tree)
-    print(pages[new_id])
-    return redirect("/page?id=" + new_id)
-
-@app.route("/page")
-def page():
-    key = request.args.get('id')
-    if key is None or key not in pages:
-        return "Nothing here!\n"
-    return f"<!DOCTYPE html><html><body>{pages[key]}</body></html>"
+    return f"<!DOCTYPE html><html><body>{str(tree)}</body></html>"
 

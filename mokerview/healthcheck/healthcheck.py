@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +13,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-set -Eeuo pipefail
 
-TIMEOUT=240 # slow solver
-PERIOD=600
+import pwnlib.util.web
 
-export TERM=linux
-export TERMINFO=/etc/terminfo
+if b"Welcome to my Moker Collection website" in pwnlib.util.web.wget("http://localhost:1337/"):
+      exit(0)
 
-while true; do
-  echo -n "[$(date)] "
-  if timeout "${TIMEOUT}" /home/user/healthcheck.py; then
-    echo 'ok' | tee /tmp/healthz
-  else
-    echo -n "$? "
-    echo 'err' | tee /tmp/healthz
-  fi
-  sleep "${PERIOD}"
-done
+exit(1)
+

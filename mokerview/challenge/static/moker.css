@@ -1,0 +1,16 @@
+* {
+    background-image: url('https://i.imgur.com/dQJOyoO.png');
+    background-repeat: repeat;
+}
+
+.moker {
+    width: 80%;
+    margin-left: 10%;
+    animation: spin 3s ease infinite;
+}
+
+@keyframes spin { 
+    100% { 
+        transform: skew(360deg) rotate3d(1, 1, 1, 360deg) rotate(360deg);
+    } 
+}

@@ -1,4 +1,3 @@
-#!/bin/bash
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-set -Eeuo pipefail
+FROM gcr.io/kctf-docker/healthcheck@sha256:abe5bc78f1eed01a050bc9efccde279aef560888598c0a04547b383a1429c6d4
 
-TIMEOUT=240 # slow solver
-PERIOD=600
+COPY healthcheck_loop.sh healthcheck.py healthz_webserver.py /home/user/
 
-export TERM=linux
-export TERMINFO=/etc/terminfo
-
-while true; do
-  echo -n "[$(date)] "
-  if timeout "${TIMEOUT}" /home/user/healthcheck.py; then
-    echo 'ok' | tee /tmp/healthz
-  else
-    echo -n "$? "
-    echo 'err' | tee /tmp/healthz
-  fi
-  sleep "${PERIOD}"
-done
+CMD kctf_drop_privs /home/user/healthcheck_loop.sh & /home/user/healthz_webserver.py

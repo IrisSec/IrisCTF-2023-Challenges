@@ -1,0 +1,17 @@
+apiVersion: kctf.dev/v1
+kind: Challenge
+metadata:
+  name: mokerview
+spec:
+  deployed: true
+  powDifficultySeconds: 0
+  network:
+    public: false
+    ports:
+      - protocol: "HTTPS"
+        targetPort: 1337
+  healthcheck:
+    # TIP: disable the healthcheck during development
+    enabled: true
+    image: kind/healthcheck:e052c37fa3c37a48012643faea41f46f50f682f271c60c2ea5aac2c46a244879
+  image: kind/challenge:5e86c987aab13b2edb46d5a8d6a5849054970484df5a276f2e289505424392bf

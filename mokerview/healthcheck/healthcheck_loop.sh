@@ -14,8 +14,8 @@
 # limitations under the License.
 set -Eeuo pipefail
 
-TIMEOUT=240 # slow solver
-PERIOD=600
+TIMEOUT=20
+PERIOD=30
 
 export TERM=linux
 export TERMINFO=/etc/terminfo
