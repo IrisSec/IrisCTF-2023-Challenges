@@ -67,8 +67,9 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 
 COPY bot.js /home/user/
 COPY cookie /home/user/
+RUN cd /home/user && npm install puppeteer
 
-ENV DOMAIN="tagged-web.irisctf-2023.kctf.cloud"
+ENV DOMAIN="mokerview-web.irisctf-2023.kctf.cloud"
 # Hosting multiple web challenges same-site to each other can lead to
 # unintended solutions. E.g. an xss on a.foo.com will be able to overwrite
 # cookies on b.foo.com.
@@ -76,7 +77,7 @@ ENV DOMAIN="tagged-web.irisctf-2023.kctf.cloud"
 # foo.com except for the real challenge domain using a PAC script.
 # Unfortunately, PAC will not work in chrome headless mode, so this will use
 # more resources.
-ENV BLOCK_SUBORIGINS="1"
+ENV BLOCK_SUBORIGINS="0"
 ENV REGISTERED_DOMAIN="irisctf-2023.kctf.cloud"
 
 RUN if [ "${BLOCK_SUBORIGINS}" = "1" ]; then \
@@ -86,15 +87,9 @@ RUN if [ "${BLOCK_SUBORIGINS}" = "1" ]; then \
     fi
 RUN sed -i -e "s/DOMAIN_SET_IN_DOCKERFILE/${DOMAIN}/" /home/user/cookie
 
-ENV PUPPETEER_CACHE_DIR="/home/user/.cache/puppeteer"
-RUN cd /home/user && npm install puppeteer
-
-ENV BOT_TIMEOUT="60"
-
 CMD kctf_setup && \
     mount -t tmpfs none /tmp && \
     mkdir /tmp/chrome-userdata && chmod o+rwx /tmp/chrome-userdata && \
-    cd /home/user && \
     while true; do \
       if [ "${BLOCK_SUBORIGINS}" = "1" ]; then \
         kctf_drop_privs env BLOCK_SUBORIGINS="${BLOCK_SUBORIGINS}" DOMAIN="${DOMAIN}" REGISTERED_DOMAIN="${REGISTERED_DOMAIN}" xvfb-run /usr/bin/node /home/user/bot.js; \

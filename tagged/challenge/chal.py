@@ -4,7 +4,6 @@ import secrets
 import base64
 
 app = Flask(__name__)
-pages = {}
 SAFE_TAGS = ['i', 'b', 'p', 'br']
 
 with open("home.html") as home:
