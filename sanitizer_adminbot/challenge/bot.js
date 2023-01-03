@@ -4,7 +4,16 @@ const net = require('net');
 
 const BOT_TIMEOUT = process.env.BOT_TIMEOUT || 60*1000;
 
-const puppeter_args = {};
+const puppeter_args = {"args": [
+    '--no-sandbox',
+    `--window-size=1920,1080`,
+    '--window-position=0,0',
+    '--hide-scrollbars',
+    '--disable-background-timer-throttling',
+    '--disable-renderer-backgrounding',
+    '--force-color-profile=srgb',
+    '--metrics-recording-only',
+    '--mute-audio'], headless: true};
 
 (async function(){
   const browser = await puppeteer.launch(puppeter_args);
@@ -24,11 +33,12 @@ const puppeter_args = {};
       return;
     }
     socket.state = 'LOADED';
-    let cookie = JSON.parse(fs.readFileSync('/home/user/cookie'));
 
     const context = await browser.createIncognitoBrowserContext();
     const page = await context.newPage();
-    await page.setCookie(cookie);
+    await page.goto("https://sanitizer-web.irisctf-2023.kctf.cloud/");
+    let flag = fs.readFileSync('/home/user/flag');
+    await page.evaluate("window.localStorage['flag'] = 'irisctf{C0nt41n3r_Qu3r13s_4r3_N3at}'");
     socket.write(`Loading page ${url}.\n`);
     setTimeout(()=>{
       try {

@@ -66,8 +66,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     && rm -rf /var/lib/apt/lists/*
 
 COPY bot.js /home/user/
-COPY cookie /home/user/
-RUN cd /home/user && npm install puppeteer
+COPY flag /home/user/
 
 ENV DOMAIN="sanitizer-web.irisctf-2023.kctf.cloud"
 # Hosting multiple web challenges same-site to each other can lead to
@@ -78,14 +77,17 @@ ENV DOMAIN="sanitizer-web.irisctf-2023.kctf.cloud"
 # Unfortunately, PAC will not work in chrome headless mode, so this will use
 # more resources.
 ENV BLOCK_SUBORIGINS="0"
-ENV REGISTERED_DOMAIN="example.com"
+ENV REGISTERED_DOMAIN="sanitizer-web.irisctf-2023.kctf.cloud"
 
 RUN if [ "${BLOCK_SUBORIGINS}" = "1" ]; then \
       apt-get update \
       && apt-get install -yq --no-install-recommends xvfb \
       && rm -rf /var/lib/apt/lists/*; \
     fi
-RUN sed -i -e "s/DOMAIN_SET_IN_DOCKERFILE/${DOMAIN}/" /home/user/cookie
+# RUN sed -i -e "s/DOMAIN_SET_IN_DOCKERFILE/${DOMAIN}/" /home/user/cookie
+
+ENV PUPPETEER_CACHE_DIR="/home/user/.cache/puppeteer"
+RUN cd /home/user && npm install puppeteer
 
 CMD kctf_setup && \
     mount -t tmpfs none /tmp && \
