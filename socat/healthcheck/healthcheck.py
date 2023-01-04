@@ -30,7 +30,7 @@ print(r.recvuntil(b'== proof-of-work: '))
 if r.recvline().startswith(b'enabled'):
     handle_pow(r)
 
-r.sendline(b'"')
+r.sendline(b"'")
 print(r.recvuntil(b'irisctf{'))
 print(r.recvuntil(b'}'))
 

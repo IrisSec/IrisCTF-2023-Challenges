@@ -9,7 +9,7 @@ spec:
     public: false
   healthcheck:
     # TIP: disable the healthcheck during development
-    enabled: false
+    enabled: true
   # You can allow the bot to connect to other challenges internally.
   # This can be useful during testing so that you don't have to make your
   # challenge public.

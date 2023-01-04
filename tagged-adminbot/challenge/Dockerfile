@@ -68,7 +68,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 COPY bot.js /home/user/
 COPY cookie /home/user/
 
-ENV DOMAIN="tagged-web.irisctf-2023.kctf.cloud"
+ENV DOMAIN="tagged-web.chal.irisc.tf"
 # Hosting multiple web challenges same-site to each other can lead to
 # unintended solutions. E.g. an xss on a.foo.com will be able to overwrite
 # cookies on b.foo.com.
@@ -77,7 +77,7 @@ ENV DOMAIN="tagged-web.irisctf-2023.kctf.cloud"
 # Unfortunately, PAC will not work in chrome headless mode, so this will use
 # more resources.
 ENV BLOCK_SUBORIGINS="1"
-ENV REGISTERED_DOMAIN="irisctf-2023.kctf.cloud"
+ENV REGISTERED_DOMAIN="chal.irisc.tf"
 
 RUN if [ "${BLOCK_SUBORIGINS}" = "1" ]; then \
       apt-get update \

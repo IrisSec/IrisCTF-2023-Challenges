@@ -33,9 +33,9 @@ const puppeter_args = {"args": [
 
     const context = await browser.createIncognitoBrowserContext();
     const page = await context.newPage();
-    await page.goto("https://sanitizer-web.irisctf-2023.kctf.cloud/");
-    let flag = fs.readFileSync('/home/user/flag');
-    await page.evaluate(`window.localStorage['flag'] = '{flag}'`);
+    await page.goto("https://sanitizer-web.chal.irisc.tf/");
+    let flag = fs.readFileSync('/home/user/flag').toString().trim();
+    await page.evaluate(`window.localStorage['flag'] = '${flag}'`);
     socket.write(`Loading page ${url}.\n`);
     setTimeout(()=>{
       try {
