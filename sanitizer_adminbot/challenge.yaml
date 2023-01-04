@@ -6,7 +6,7 @@ spec:
   deployed: true
   powDifficultySeconds: 10
   network:
-    public: true
+    public: false
   healthcheck:
     # TIP: disable the healthcheck during development
     enabled: true

@@ -23,6 +23,10 @@ function randomStr(len) {
 	return res;
 }
 
+app.get("/", (req, res) => {
+        res.send("K8s requires a 200 for this endpoint so I had to put something here");
+});
+
 app.get("/gettoken", (req, res) => {
 	let tokenCode = randomStr(32);
 	let tokenObj = {

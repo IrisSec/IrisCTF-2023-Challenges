@@ -1,0 +1,2 @@
+service is in namespace ingress-nginx
+run `kubectl remove -f nginx.yaml` when done

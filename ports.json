@@ -1,0 +1,15 @@
+{
+    "socat":            10000,
+    "ret2libm":         10001,
+    "infinitedescent":  10002,
+    "michaelbank":      10003,
+    "aes-bad-256":      10100,
+    "host":             10300,
+    "nameless":         10301,
+    "examplejail":      10302,
+    "alienrev":         10600,
+    "metacalc":         10700,
+    "tagged_adminbot":  10701,
+    "mokerview_adminbot":10702,
+    "sanitizer_adminbot":10703
+}

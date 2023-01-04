@@ -16,7 +16,7 @@
 
 import pwnlib.util.web
 
-if b"What to send?" in pwnlib.util.web.wget("http://localhost:1337/"):
+if b"missing" in pwnlib.util.web.wget("http://localhost:1337/getiden"):
       exit(0)
 
 exit(1)
