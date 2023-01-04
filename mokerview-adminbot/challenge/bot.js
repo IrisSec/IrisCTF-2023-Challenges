@@ -60,8 +60,6 @@ if (BLOCK_SUBORIGINS) {
     });
 
     await page.waitForTimeout(1000);
-    let cookies = await page.cookies();
-    socket.write(`${JSON.stringify(cookies)}\n`);
 
     //await page.setCookie(cookie);
     socket.write(`Loading page ${url}.\n`);

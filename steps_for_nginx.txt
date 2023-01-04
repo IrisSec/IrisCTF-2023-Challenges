@@ -1,0 +1,68 @@
+0)
+Set up kCTF and get a cluster working normally first
+
+1)
+Add a firewall rule allowing port 8443 to the kCTF network
+https://console.cloud.google.com/networking/firewalls/list
+
+2)
+Install ingress-nginx as given here: https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke
+
+3)
+Download a copy of the default deployment here: https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.5.1/deploy/static/provider/cloud/deploy.yaml
+
+Add a section right after/before the section with "kind: ConfigMap":
+```
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tcp-services
+  namespace: ingress-nginx
+data:
+  _PORT_: "default/_CHALL_:1337"
+  _PORT_: "default/_CHALL_:1337"
+  ...
+---
+```
+Replace each _PORT_ with the port you want to be exposed publicly, and _CHALL_ with the name of the challenge as specified in challenge.yaml (it should be the same as the directory).
+
+Add some lines after this:
+```
+  - appProtocol: https
+    name: https
+    port: 443
+    protocol: TCP
+    targetPort: https
+```
+
+of the form
+```
+  - appProtocol: tcp
+    name: _CHALL_
+    port: _PORT_
+    protocol: TCP
+    targetPort: _CHALL_
+```
+This time, make sure that _CHALL_ follows [a-z0-9-]+ and is at most 15 characters.
+
+Add a few more lines after this:
+```
+        - containerPort: 8443
+          name: webhook
+          protocol: TCP
+```
+
+of the form
+```
+        - containerPort: _PORT_
+          name: _CHALL_
+          protocol: TCP
+```
+Again, make sure that the name matches.
+
+4)
+Apply with `kubectl apply -f deploy.yaml`
+
+5)
+See your external IP with `kubectl get services -n ingress-nginx ingress-nginx-controller`

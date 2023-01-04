@@ -10,8 +10,6 @@ spec:
     ports:
       - protocol: "HTTPS"
         targetPort: 1337
-        domains:
-            - "mokerview.chal.irisc.tf"
   healthcheck:
     # TIP: disable the healthcheck during development
     enabled: true

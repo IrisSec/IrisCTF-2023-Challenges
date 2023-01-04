@@ -1,7 +1,7 @@
 from pwn import *
 
 while True:
-    r = remote("localhost", 49174)
+    r = remote("aes.chal.irisc.tf", 10100)
 
     mapped = []
     bz = 16
@@ -24,7 +24,7 @@ while True:
             nc = c if cmd[i] != c else "0"
             new_cmd = cmd[:i] + nc + cmd[i+1:]
             r.sendline(b"2")
-            r.recvuntil(b"(hex) > ")
+            #r.recvuntil(b"(hex) > ")
             r.sendline(new_cmd.encode())
             d = r.recvuntil(b"1. Get")
             if b"Unknown command" in d:
