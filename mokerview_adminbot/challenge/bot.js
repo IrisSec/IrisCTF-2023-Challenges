@@ -52,14 +52,16 @@ if (BLOCK_SUBORIGINS) {
 
     const context = await browser.createIncognitoBrowserContext();
     const page = await context.newPage();
-    await page.goto("https://mokerview-web.irisctf-2023.kctf.cloud/login");
-    await page.type('input[name=user]', '@admin');
-    await page.type('input[name=password]', 'this_password_is_for_you_moker_!!!')
+    await page.goto("https://mokerview-web.chal.irisc.tf/login");
     await page.evaluate(() => {
+        document.querySelector('input[name=user]').value = '@admin';
+        document.querySelector('input[name=password]').value = 'this_password_is_for_you_moker_!!!';
         document.querySelector('input[type=submit]').click();
     });
 
     await page.waitForTimeout(1000);
+    let cookies = await page.cookies();
+    socket.write(`${JSON.stringify(cookies)}\n`);
 
     //await page.setCookie(cookie);
     socket.write(`Loading page ${url}.\n`);

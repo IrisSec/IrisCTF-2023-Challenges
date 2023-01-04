@@ -217,6 +217,9 @@ int ajjgpfl(int dyfe)
 
 int main()
 {
+    setvbuf(stdin, NULL, _IONBF, 0);
+    setvbuf(stdout, NULL, _IONBF, 0);
+
     fjwpa_bpafbz();
 
     printf("╜═─┬┼ │┘┘│╒┼ ┬┼─┤┴╣┼─ ┼┐┘┐└╙┴╓│ ┬├╪┘╚├。\n");

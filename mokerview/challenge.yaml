@@ -6,10 +6,12 @@ spec:
   deployed: true
   powDifficultySeconds: 0
   network:
-    public: false
+    public: true
     ports:
       - protocol: "HTTPS"
         targetPort: 1337
+        domains:
+            - "mokerview.chal.irisc.tf"
   healthcheck:
     # TIP: disable the healthcheck during development
     enabled: true

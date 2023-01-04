@@ -3,5 +3,5 @@ PROJECT=irisctf
 ZONE=europe-west4-b
 REGISTRY=eu.gcr.io
 CLUSTER_NAME=kctf-cluster
-DOMAIN_NAME=irisctf-2023.kctf.cloud
+DOMAIN_NAME=chal.irisc.tf
 EMAIL_ADDRESS=

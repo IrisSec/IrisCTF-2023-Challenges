@@ -10,7 +10,10 @@ const puppeter_args = {"args": [
     '--window-position=0,0',
     '--hide-scrollbars',
     '--disable-background-timer-throttling',
-    '--disable-renderer-backgrounding'], headless: true};
+    '--disable-renderer-backgrounding',
+    '--force-color-profile=srgb',
+    '--metrics-recording-only',
+    '--mute-audio'], headless: true};
 
 (async function(){
   const browser = await puppeteer.launch(puppeter_args);

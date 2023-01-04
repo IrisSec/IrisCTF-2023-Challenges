@@ -31,7 +31,7 @@ sessions = defaultdict(dict)
 @app.after_request
 def csp(r):
     # Moker does not like "Java Script"
-    r.headers["Content-Security-Policy"] = "script-src 'none'; img-src https://i.imgur.com/"
+    r.headers["Content-Security-Policy"] = "script-src 'none'; object-src 'none'; img-src https://i.imgur.com/"
     return r
 
 def session(f):
