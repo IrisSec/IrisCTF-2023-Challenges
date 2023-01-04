@@ -13,8 +13,8 @@ GDNS="gcloud dns --project=$PROJECT record-sets transaction"
 
 echo "Project: $PROJECT\nDNS Zone: $DNS_ZONE\nDNS Record: $DNS_RECORD\n"
 
-IP=$(dig -4 TXT +short o-o.myaddr.l.google.com @ns1.google.com | tr -d \")
-CURRENT_IP=$(kubectl get services --namespace ingress-nginx ingress-nginx-controller --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
+CURRENT_IP=$(dig -4 A +short router.chal.irisc.tf | tr -d \")
+IP=$(kubectl get services --namespace ingress-nginx ingress-nginx-controller --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
 
 if [ "$IP" ]; then 
   if [ "$CURRENT_IP" != "$IP" ]; then 

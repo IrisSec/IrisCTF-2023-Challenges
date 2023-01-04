@@ -445,20 +445,20 @@ spec:
     protocol: TCP
     targetPort: metacalc
   - appProtocol: tcp
-    name: tagged_adminbot
+    name: tagged-adminbot
     port: 10701
     protocol: TCP
-    targetPort: tagged_adminbot
+    targetPort: tagged-adminbot
   - appProtocol: tcp
-    name: mokerview_adminbot
+    name: mokerview-adminbot
     port: 10702
     protocol: TCP
-    targetPort: mokerview_adminbot
+    targetPort: mokerview-adminbot
   - appProtocol: tcp
-    name: sanitizer_adminbot
+    name: sanitizer-adminbot
     port: 10703
     protocol: TCP
-    targetPort: sanitizer_adminbot
+    targetPort: sanitizer-adminbot
   selector:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: ingress-nginx
@@ -596,13 +596,13 @@ spec:
           name: metacalc
           protocol: TCP
         - containerPort: 10701
-          name: tagged_adminbot
+          name: tagged-adminbot
           protocol: TCP
         - containerPort: 10702
-          name: mokerview_adminbot
+          name: mokerview-adminbot
           protocol: TCP
         - containerPort: 10703
-          name: sanitizer_adminbot
+          name: sanitizer-adminbot
           protocol: TCP
         readinessProbe:
           failureThreshold: 3
