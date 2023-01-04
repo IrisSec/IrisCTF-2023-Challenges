@@ -1,0 +1,14 @@
+apiVersion: kctf.dev/v1
+kind: Challenge
+metadata:
+  name: alienrev
+spec:
+  deployed: true
+  powDifficultySeconds: 10
+  network:
+    public: true
+  healthcheck:
+    # TIP: disable the healthcheck during development
+    enabled: true
+    image: kind/healthcheck:3f82eb36057e81be9841c53514804b523edc7d5884dfe419860bdb5b187dd5b8
+  image: kind/challenge:09f7c4c75437770ef666205ebf33e5f5f1e8b6f3eb2970a77b5d35faf3600c06
