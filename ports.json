@@ -3,6 +3,7 @@
     "ret2libm":         10001,
     "infinitedescent":  10002,
     "michaelbank":      10003,
+    "seek":             10004,
     "aes-bad-256":      10100,
     "host":             10300,
     "nameless":         10301,
