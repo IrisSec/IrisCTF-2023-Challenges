@@ -24,7 +24,7 @@ function randomStr(len) {
 }
 
 app.get("/", (req, res) => {
-    return "Empty route for / for k8s";
+    res.send("Empty route for / for k8s");
 });
 
 app.get("/gettoken", (req, res) => {
