@@ -13,5 +13,6 @@
     "tagged-adminbot":  10701,
     "mokerview-adminbot":10702,
     "sanitizer-adminbot":10703,
-    "stretchy":         10704
+    "stretchy":         10704,
+    "babycsrf-adminbot":10705
 }

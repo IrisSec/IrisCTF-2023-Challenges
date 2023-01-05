@@ -1,0 +1,9 @@
+{
+  "name": "session",
+  "value": "irisctf{jsonp_is_never_the_answer}",
+  "domain": "DOMAIN_SET_IN_DOCKERFILE",
+  "url": "https://DOMAIN_SET_IN_DOCKERFILE",
+  "path": "/",
+  "httpOnly": true,
+  "secure": true
+}
