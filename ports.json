@@ -11,5 +11,6 @@
     "metacalc":         10700,
     "tagged-adminbot":  10701,
     "mokerview-adminbot":10702,
-    "sanitizer-adminbot":10703
+    "sanitizer-adminbot":10703,
+    "stretchy":         10704
 }
