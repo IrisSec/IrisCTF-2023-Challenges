@@ -11,21 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-FROM node:latest as chroot
+FROM gcr.io/kctf-docker/healthcheck@sha256:abe5bc78f1eed01a050bc9efccde279aef560888598c0a04547b383a1429c6d4
 
-RUN /usr/sbin/useradd -u 1337 user
+COPY healthcheck_loop.sh healthcheck.py healthz_webserver.py /home/user/
 
-COPY index.js /home/user/
-COPY coolsdk.tar.gz /home/user/
-COPY run.sh /home/user/
-COPY .env /home/user/
-
-RUN cd /home/user && npm install dotenv express octokit crypto-js
-
-FROM gcr.io/kctf-docker/challenge@sha256:d884e54146b71baf91603d5b73e563eaffc5a42d494b1e32341a5f76363060fb
-
-COPY --from=chroot / /chroot
-
-COPY nsjail.cfg /home/user/
-
-CMD kctf_setup && kctf_drop_privs nsjail --config /home/user/nsjail.cfg -- /home/user/run.sh
+CMD kctf_drop_privs /home/user/healthcheck_loop.sh & /home/user/healthz_webserver.py

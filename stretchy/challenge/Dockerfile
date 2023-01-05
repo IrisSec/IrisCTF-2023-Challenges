@@ -11,16 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-FROM node:latest as chroot
+FROM php:latest as chroot
 
-RUN /usr/sbin/useradd -u 1337 user
+RUN /usr/sbin/useradd --no-create-home -u 1000 user
 
-COPY index.js /home/user/
-COPY coolsdk.tar.gz /home/user/
-COPY run.sh /home/user/
-COPY .env /home/user/
-
-RUN cd /home/user && npm install dotenv express octokit crypto-js
+COPY flag /home/user/
+COPY chal.php /home/user/
 
 FROM gcr.io/kctf-docker/challenge@sha256:d884e54146b71baf91603d5b73e563eaffc5a42d494b1e32341a5f76363060fb
 
@@ -28,4 +24,8 @@ COPY --from=chroot / /chroot
 
 COPY nsjail.cfg /home/user/
 
-CMD kctf_setup && kctf_drop_privs nsjail --config /home/user/nsjail.cfg -- /home/user/run.sh
+CMD kctf_setup && \
+    kctf_drop_privs \
+    socat \
+      TCP-LISTEN:1337,reuseaddr,fork \
+      EXEC:"kctf_pow nsjail --config /home/user/nsjail.cfg -- /usr/local/bin/php -f chal.php"

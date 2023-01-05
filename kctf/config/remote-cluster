@@ -1,7 +1,0 @@
-CLUSTER_TYPE=gce
-PROJECT=irisctf
-ZONE=europe-west4-b
-REGISTRY=eu.gcr.io
-CLUSTER_NAME=kctf-cluster
-DOMAIN_NAME=chal.irisc.tf
-EMAIL_ADDRESS=

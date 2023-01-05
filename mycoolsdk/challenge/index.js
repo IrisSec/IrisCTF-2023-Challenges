@@ -5,7 +5,7 @@ const url = require("url");
 const app = express();
 const SHA256 = require("crypto-js/sha256");
 
-const port = 1337;
+const port = 3000;
 
 dotenv.config();
 const PERSONAL_ACCESS_TOKEN2 = process.env.PERSONAL_ACCESS_TOKEN2;
@@ -24,7 +24,7 @@ function randomStr(len) {
 }
 
 app.get("/", (req, res) => {
-        res.send("K8s requires a 200 for this endpoint so I had to put something here");
+    return "Empty route for / for k8s";
 });
 
 app.get("/gettoken", (req, res) => {
@@ -77,6 +77,7 @@ app.get("/getiden", (req, res) => {
 		runId: q.runid.toString(),
 		timeCreated: Math.floor(Date.now() / 1000)
 	};
+	
 	identities[identityCode] = identityObj;
 	tokens[tokenCode].identity = identityCode;
 	console.log("/getiden: " + identityCode);
@@ -104,7 +105,14 @@ app.get("/checkiden", async (req, res) => {
 	
 	let identityObj = identities[tokenObj.identity];
 	
-	let repoIdentity = await getRepoIdentity(identityObj.owner, identityObj.repo, identityObj.runId);
+	
+	var repoIdentity;
+	try {
+		repoIdentity = await getRepoIdentity(identityObj.owner, identityObj.repo, identityObj.runId);	
+	} catch {
+		repoIdentity = undefined;
+	}
+
 	if (repoIdentity == undefined) {
 		res.send("repo identity failed!");
 		return;
@@ -153,7 +161,7 @@ app.listen(port, () => {
 });
 
 function hasTokenNotExpired(tokenObj) {	
-	if (tokenObj.status == "EXPIRED" || (Date.now() / 1000) - tokenObj.timeCreated > 30) {
+	if (tokenObj.status == "EXPIRED" || (Date.now() / 1000) - tokenObj.timeCreated > 120) {
 		tokenObj.status = "EXPIRED";
 		return false;
 	}
@@ -179,10 +187,20 @@ async function getRepoIdentity(owner, repo, runId) {
 	
 	let logLines = jobLogInfo.data.split(/\r?\n/);
 	
-	let idenStr = undefined;
-	const target = "Z SDK Server Identity: ";
+	// only check after job begins
+	let startPos = 0;
 	for (let i = 0; i < logLines.length; i++) {
-		if (logLines[i].includes(target)) {
+		if (logLines[i].includes("Job is about to start running on the hosted runner")) {
+			startPos = i + 1;
+			break;
+		}
+	}
+
+	// scan for server id string
+	let idenStr = undefined;
+	const target = "ServerID-";
+	for (let i = startPos; i < logLines.length; i++) {
+		if (logLines[i].includes(target) && !logLines[i].includes("echo")) {
 			let idx = logLines[i].indexOf(target);
 			let len = target.length;
 			
@@ -218,7 +236,7 @@ async function getRepoIdentity(owner, repo, runId) {
 	let workflowContents = Buffer.from(fileInfo.data.content, "base64");
 	let workflowHash = SHA256(workflowContents.toString()).toString();
 
-	const MATCH_HASH = "4278a02118b558e498db7c322d98fff4b6cb0d9deed0a65ed9e42cb4f5e36fc8";
+	const MATCH_HASH = "8951a3d29206cf24600379fba7efeb7d8fc9181353a958f710a32eb786ae8654";
 	if (workflowHash != MATCH_HASH) {
 		console.log(`expected ${MATCH_HASH}, found ${workflowHash} hash for workflow!`);
 		return undefined;
