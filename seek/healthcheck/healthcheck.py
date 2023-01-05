@@ -35,10 +35,10 @@ r.recvuntil(b"Your flag is located around ")
 flag = eval(r.recvuntil(b".", drop=True).decode())
 r.recvuntil(b"I'm currently at ")
 loc = eval(r.recvuntil(b".", drop=True).decode())
-send = flag - log + off
+send = flag - loc + off
 r.sendline(str(send).encode())
 
-print(r.recvuntil(b'irsictf{'))
+print(r.recvuntil(b'irisctf{'))
 print(r.recvuntil(b'}'))
 
 exit(0)

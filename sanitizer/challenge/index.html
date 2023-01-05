@@ -7,9 +7,8 @@
             const flag = window.localStorage["flag"] || "irisctf{REDACTED_redacted_R3d4cT3d}";
             console.assert(flag.length == 35);
             document.getElementById("flag").innerText = flag;
-            const san = new Sanitizer();
             const inp = decodeURIComponent(location.search.substr(1));
-            document.getElementById("target").setHTML(inp, {sanitizer: san});
+            document.getElementById("target").setHTML(inp);
         </script>
     </body>
 </html>
