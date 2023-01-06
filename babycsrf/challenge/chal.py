@@ -13,5 +13,3 @@ def home():
 def page():
     secret = request.cookies.get("secret", "EXAMPLEFLAG")
     return f"setMessage('irisctf{{{secret}}}');"
-
-app.run(port=12345)
