@@ -13,13 +13,14 @@ while True:
     cmd = r.recvuntil(b"> ").decode().split("\n")[-7]
 
     flag = "flag".encode()
+    flag2 = "FLAG".encode()
     echo = "echo".encode()
     mapped = [-1, -1, -1, -1]
 
     for i in range(bz):
         done = False
-        i = i * 16
-        for c in "0123":
+        i = i * 32
+        for c in "123":
             if done: break
             nc = c if cmd[i] != c else "0"
             new_cmd = cmd[:i] + nc + cmd[i+1:]
@@ -63,7 +64,7 @@ while True:
                 if b"..." not in b:
                     continue
                 b = b.split(b"...")[0][-4:]
-                if b[affects] == flag[affects]:
+                if b[affects] == flag[affects] or b[affects] == flag2[affects]:
                     cmd = new_cmd
                     done = True
                     break

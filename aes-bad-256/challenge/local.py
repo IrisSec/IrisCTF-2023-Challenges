@@ -1,35 +1,8 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Copyright 2020 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-import pwnlib.tubes
-
-def handle_pow(r):
-    print(r.recvuntil(b'python3 '))
-    print(r.recvuntil(b' solve '))
-    challenge = r.recvline().decode('ascii').strip()
-    p = pwnlib.tubes.process.process(['kctf_bypass_pow', challenge])
-    solution = p.readall().strip()
-    r.sendline(solution)
-    print(r.recvuntil(b'Correct\n'))
+from pwn import *
 
 while True:
-    r = pwnlib.tubes.remote.remote('127.0.0.1', 1337)
-    print(r.recvuntil(b'== proof-of-work: '))
-    if r.recvline().startswith(b'enabled'):
-        handle_pow(r)
+    #r = remote("aes.chal.irisc.tf", 10100)
+    r = process(["python3", "./chal.py"])
 
     mapped = []
     bz = 16
@@ -41,7 +14,6 @@ while True:
     cmd = r.recvuntil(b"> ").decode().split("\n")[-7]
 
     flag = "flag".encode()
-    flag2 = "flag".encode()
     echo = "echo".encode()
     mapped = [-1, -1, -1, -1]
 
@@ -53,7 +25,7 @@ while True:
             nc = c if cmd[i] != c else "0"
             new_cmd = cmd[:i] + nc + cmd[i+1:]
             r.sendline(b"2")
-            r.recvuntil(b"(hex) > ")
+            #r.recvuntil(b"(hex) > ")
             r.sendline(new_cmd.encode())
             d = r.recvuntil(b"1. Get")
             if b"Unknown command" in d:
@@ -69,7 +41,7 @@ while True:
                     done = True
                     break
 
-    # print(mapped)
+    print(mapped)
     if any(i == -1 for i in mapped):
         r.close()
         continue
@@ -88,15 +60,13 @@ while True:
                 b = r.recvuntil(b"1. Get")
                 if b"irisctf" in b:
                     print(b)
-                    exit(0)
+                    exit()
                 if b"..." not in b:
                     continue
                 b = b.split(b"...")[0][-4:]
-                if b[affects] == flag[affects] or b[affects] == flag2[affects]:
+                if b[affects] == flag[affects]:
                     cmd = new_cmd
                     done = True
                     break
 
     r.close()
-
-exit(-1)

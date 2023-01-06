@@ -61,7 +61,7 @@ def run_command(inp):
     if "type" not in command:
         return "No command type"
 
-    match command["type"]:
+    match command["type"].lower():
         case "echo":
             return command.get("msg", "Hello world!")
         case "flag":
@@ -95,7 +95,6 @@ def main():
             case other:
                 print("Bye!")
                 exit(0)
-                
 
 if __name__ == "__main__":
     main()
