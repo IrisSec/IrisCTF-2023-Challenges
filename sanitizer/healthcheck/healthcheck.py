@@ -16,7 +16,7 @@
 
 import pwnlib.util.web
 
-if b"Sanitizer" in pwnlib.util.web.wget("http://localhost:1337/"):
+if b"flag" in pwnlib.util.web.wget("http://localhost:1337/"):
       exit(0)
 
 exit(1)
