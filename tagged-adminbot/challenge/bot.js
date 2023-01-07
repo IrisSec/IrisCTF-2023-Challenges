@@ -67,6 +67,7 @@ if (BLOCK_SUBORIGINS) {
         console.log(`err: ${err}`);
       }
     }, BOT_TIMEOUT);
+    await page.setExtraHTTPHeaders({"ngrok-skip-browser-warning": "please"});
     await page.goto(url);
   }
 
