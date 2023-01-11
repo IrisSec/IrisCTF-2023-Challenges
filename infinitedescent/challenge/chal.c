@@ -4,7 +4,6 @@ char volatile* end_of_the_tunnel = "irisctf{REDACTED_REDACTED_REDA}";
 char readbuf[5] = {0};
 char* last_message = "(You didn't write anything)";
 
-#define UART0DR (char*)0x4000c000
 // https://github.com/qemu/qemu/blob/master/tests/tcg/arm/semicall.h
 unsigned int __semi_call(unsigned int type, unsigned int arg0)
 {

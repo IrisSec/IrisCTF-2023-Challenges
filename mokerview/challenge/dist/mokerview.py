@@ -72,7 +72,9 @@ def signer(session):
         raw_url = url.encode()
         token = hashlib.sha256(session["key"] + raw_url).digest().hex()
         if url.find("?") != -1:
-            base, args = url.split("?")
+            idx = url.index("?")
+            base = url[:idx]
+            args = url[idx+1:]
             return base + "?" + url_encode({"args": base64.urlsafe_b64encode(args.encode()), "token": token})
         else:
             return url + "?" + url_encode({"args": '', "token": token})

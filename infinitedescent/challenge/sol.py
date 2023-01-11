@@ -1,6 +1,8 @@
 from pwn import *
 
-r = remote("0", 33005)
+r = remote("infinitedescent.chal.irisc.tf", 10002)
+r.recvuntil(b"===")
+r.send(input("pow: "))
 
 from tqdm import tqdm
 for _ in tqdm(range(15)):
