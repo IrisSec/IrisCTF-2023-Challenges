@@ -1,3 +1,0 @@
-#!/bin/bash
-
-/usr/bin/nsjail --config /home/user/cgi-bin.nsjail.cfg -- /usr/lib/cgi-bin/php $@
